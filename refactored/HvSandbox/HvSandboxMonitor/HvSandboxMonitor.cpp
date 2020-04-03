@@ -1,13 +1,16 @@
-// MyVMProv.cpp : This file contains the 'main' function. Program execution begins and ends there.
-
 #include "pch.h"
 
 #include <iostream>
-#include <Windows.h>
+#include <string>
 #include <conio.h>
 
-int wmain(int argc, wchar_t* argv[])
-{
+static const std::wstring emulatorBinaryName{ L"emulator.exe" };
+
+using namespace std;
+
+int _tmain() {
+    cout << "HVSnadBox Monitor!\n"; 
+
     STARTUPINFOEX emulatorStartupInformation;
     PROCESS_INFORMATION emulatorProcessInfo;
 
@@ -16,12 +19,12 @@ int wmain(int argc, wchar_t* argv[])
     ZeroMemory(&emulatorStartupInformation, sizeof(emulatorStartupInformation));
 
     // Creating the process, in a suspended state
-    auto processCreatingResult = CreateProcess(L"emulator.exe",
-            GetCommandLine(), NULL, NULL, TRUE,
-            CREATE_SUSPENDED | EXTENDED_STARTUPINFO_PRESENT,
-            NULL, NULL,
-            &emulatorStartupInformation.StartupInfo,
-            &emulatorProcessInfo);
+    auto processCreatingResult = CreateProcess(emulatorBinaryName.c_str(),
+        GetCommandLine(), NULL, NULL, TRUE,
+        CREATE_SUSPENDED | EXTENDED_STARTUPINFO_PRESENT,
+        NULL, NULL,
+        &emulatorStartupInformation.StartupInfo,
+        &emulatorProcessInfo);
 
     // Checking for error codes
     if (false == processCreatingResult) {
@@ -30,6 +33,11 @@ int wmain(int argc, wchar_t* argv[])
     }
 
     // Waiting for user input to continue
-    getch();
-    return 0;
+    cout << "Press any ket to exit\n";
+    int n;
+    cin >> n;
+
+    // Just for fun
+    return n;
 }
+
